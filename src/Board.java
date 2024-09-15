@@ -1,7 +1,6 @@
 public class Board {
-    private int Turn;
-    private Box[][] Board; //Maybe a seperate class for each box on the board
-    private int[] pieces;
+    private int Turn; // keep track of player trun
+    private Box[][] Board; //store separate class for each box on the board
     private String[][] playerWinLoss;
     private String[][] moves;
     private int boardSizeM; //store the row number of the board
@@ -10,10 +9,10 @@ public class Board {
     public Board(int boardM, int boardN){
         this.boardSizeM=boardM;
         this.boardSizeN=boardN;
-
         this.Board=new Box[this.boardSizeM][this.boardSizeN];
 
     }
+    // creates boxes objects on the board with unique id
     public void createBoardPiece(){
         int count = this.getBoardSizeM() * this.getBoardSizeN();
         int current = 0;
