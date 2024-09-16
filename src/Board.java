@@ -31,4 +31,26 @@ public class Board {
     public int getBoardSizeN(){
         return this.boardSizeN;
     }
+
+
+    // Method used printout the board
+    public void printBoard(){
+
+        for (int i=0;i<this.getBoardSizeM();i++){
+            for (int k=0; k<this.getBoardSizeN()*2; k++){
+                System.out.print("_");
+            }
+            System.out.println();
+            for (int j=0; j<this.getBoardSizeN(); j++){
+
+                if (this.Board[i][j].getMark() == null){
+                    System.out.print(" |");
+                }
+                else{
+                    System.out.print(this.Board[i][j].getMark()+"|");
+                }
+            }
+            System.out.println();
+        }
+    }
 }
