@@ -1,8 +1,8 @@
 public class Board {
     private int Turn; // keep track of player trun
     private Box[][] Boardsur; //store separate class for each box on the board
-    private String[][] playerWinLoss;
-    private String[][] moves;
+    private String[][] playerWinLoss; // maybe there is no need for this
+    private String[][] moves; //
     private int boardSizeM; //store the row number of the board
     private int boardSizeN; //store the column number of the board
 

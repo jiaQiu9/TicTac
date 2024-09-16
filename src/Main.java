@@ -22,7 +22,6 @@ public class Main {
         // use the numplayer to create numplayer Player objects
         Player[] players= new Player[numPlayer];
 
-
         if (userGame==1){
             // for tic-tac-toe
 
@@ -37,6 +36,7 @@ public class Main {
             tictac.printBoard();
 
             // Game play
+            gamePlay3t(tictac, players, numPlayer);
 
 
         }
@@ -105,7 +105,7 @@ public class Main {
             userIn = userInput.nextLine();
             System.out.println();
             if (checkInt(userIn)){
-                if (Integer.valueOf(userIn)%2==0){
+                if (Integer.valueOf(userIn)%2==0 && Integer.valueOf(userIn)>2){
                     isValid = true;
                     numPlayer = Integer.parseInt(userIn);
                 }
@@ -227,8 +227,32 @@ public class Main {
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     //Game Play for tic-tac-toe
-    public static void gamePlay3t(Board board, int numPlayer){
+    public static void gamePlay3t(Board board, Player[] players, int numPlayers){
+        Scanner userInput = new Scanner(System.in);
+        System.out.println("Tic-Tac-Toe Starting.");
+        //pointers for the players, so there is no need for creating two array to store players of different teams
+        int first =0; // the pointed for the first player, in the first team
+        int second=1; // the pointer for the second player OR the first player of the other(second) team
+        boolean gameEnd=false;
+        boolean turn = false;
+        String playerMove = "";
+        // distinguish different num of players, for 2 players one will be X other will be O
+        // for more than 2 player, the first half of the players will be X, the other half will be O
+        // number of Players should always be even, and more than one
+        if (numPlayers>2){
+            second = numPlayers/2 -1;
+        }
 
+        while(!gameEnd){
+            System.out.println("Game Start!");
+            board.printBoard();
+            if (turn){
+                System.out.println("Player "+ players[first].getPlayerID()+ " make your move. Your mark is "+ players[first].getPlayerMark());
+                System.out.print("Enter a numeric value that represents the position on the board, that your want to place your mark:");
+
+
+            }
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
