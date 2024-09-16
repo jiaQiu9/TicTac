@@ -93,6 +93,7 @@ public class Main {
 
     public static int getNumPlayer(){
         // the number of player based on the user input
+        // some games have fixed player num, some have flexible player num
         Scanner userInput = new Scanner(System.in);
 
         return 0;
