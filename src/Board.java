@@ -1,6 +1,6 @@
 public class Board {
     private int Turn; // keep track of player trun
-    private Box[][] Board; //store separate class for each box on the board
+    private Box[][] Boardsur; //store separate class for each box on the board
     private String[][] playerWinLoss;
     private String[][] moves;
     private int boardSizeM; //store the row number of the board
@@ -9,8 +9,7 @@ public class Board {
     public Board(int boardM, int boardN){
         this.boardSizeM=boardM;
         this.boardSizeN=boardN;
-        this.Board=new Box[this.boardSizeM][this.boardSizeN];
-
+        this.Boardsur=new Box[this.boardSizeM][this.boardSizeN];
     }
     // creates boxes objects on the board with unique id
     public void createBoardPiece(){
@@ -19,7 +18,7 @@ public class Board {
         for (int i=0;  i<this.getBoardSizeM();i++){
             for (int j=0; j<this.getBoardSizeN(); j++){
                 if (current<count){
-                    this.Board[i][j]= new Box(current) ;
+                    this.Boardsur[i][j]= new Box(current) ;
                     current++;
                 }
             }
@@ -43,14 +42,17 @@ public class Board {
             System.out.println();
             for (int j=0; j<this.getBoardSizeN(); j++){
 
-                if (this.Board[i][j].getMark() == null){
+                if (this.Boardsur[i][j].getMark() == null){
                     System.out.print(" |");
                 }
                 else{
-                    System.out.print(this.Board[i][j].getMark()+"|");
+                    System.out.print(this.Boardsur[i][j].getMark()+"|");
                 }
             }
             System.out.println();
         }
+    }
+    public Box[][] getBoardsur(){
+        return this.Boardsur;
     }
 }

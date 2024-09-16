@@ -25,6 +25,11 @@ public class Main {
             // get the size of the board in terms of nxn, by now
             boardSize = enterBoardSize();
 
+            // set the board and pieces of the board
+            Board tictac = new Board(boardSize, boardSize);
+            tictac.createBoardPiece();
+            tictac.printBoard();
+
         }
         else{
             // for order and chaos
@@ -39,8 +44,7 @@ public class Main {
         }
 
     }
-
-
+    // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     // this method will be used more than once
     public static boolean checkInt(String userIn){
@@ -55,6 +59,7 @@ public class Main {
         return isValid;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static int gameChoice(){
         Scanner userInput = new Scanner(System.in);
@@ -75,6 +80,7 @@ public class Main {
         }
         return Integer.valueOf(userIn);
     }
+    // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static int getNumPlayer(){
         // the number of player based on the user input
@@ -99,6 +105,7 @@ public class Main {
 
     }
     // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     public static int enterBoardSize(){
         Scanner userInput = new Scanner(System.in);
         String userIn="";
@@ -118,6 +125,16 @@ public class Main {
         }
 
         return boardSize;
+    }
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static boolean tictacCheckWin(Board board){
+        // check every row
+        // check every column
+        // check every diagonal
+
+
+        return false;
     }
 
 }

@@ -19,6 +19,13 @@ public class Box {
         return this.occupied;
     }
 
+    public void emptyMark(){
+        this.mark = null;
+    }
+    public void emptyOccupied(){
+        this.occupied = false;
+    }
+
     public int getId(){
         return this.id;
     }
