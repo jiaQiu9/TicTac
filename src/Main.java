@@ -128,11 +128,71 @@ public class Main {
     }
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    public static boolean tictacCheckWin(Board board){
+    public static boolean CheckWin(Board board, String Mark, int gameChoice){
+        // check the win condition for the tic-tac-toe game, for the input mark of the current player after making a move
+        // this could also be used to check the win condition for order and chaos game
         // check every row
         // check every column
         // check every diagonal
+        Box[][] tmp = board.getBoardsur(); // this gets the boxes on the board
+        // temporary store the box list on the board, to prevent multiple calling of the getBoardsur(), and waist time and resources
 
+        int count=0;
+        //
+        //check every row
+        for (int i = 0; i < tmp.length; i++){
+
+            for (int j = 0; j < tmp[i].length; j++){
+                if (tmp[i][j].getMark().equals(Mark)){
+                    count++;
+                }
+            }
+            if (count == board.getBoardSizeM()){
+                return true;
+            }
+            count =0 ;
+        }
+
+        // check every column
+        for (int i = 0; i < board.getBoardSizeN(); i++){
+
+            for (int j = 0; j < board.getBoardSizeM(); j++){
+                if (tmp[j][i].getMark().equals(Mark)){
+                    count++;
+                }
+            }
+            if (count == board.getBoardSizeN()){
+                return true;
+            }
+            count=0;
+        }
+
+        // check diagonal forward
+        for (int i = 0; i < board.getBoardSizeM(); i++){
+            count = 0;
+            for (int j = 0; j < board.getBoardSizeN(); j++){
+                if (i==j && tmp[i][j].getMark().equals(Mark)){
+                    count++;
+                }
+                if (count == 3){ // TO Do need to change to actual diagonal num
+                    return true;
+                }
+            }
+            count=0;
+        }
+        // check diagonal backward
+        for (int i=board.getBoardSizeN()-1; i>0; i--){
+            for (int j=0; j<board.getBoardSizeM(); j++){
+                if(tmp[j][i].getMark().equals(Mark)){
+                    count++;
+                }
+                if (count == 3) { // TO DO need to change to actual diagonal num
+
+                    return true;
+                }
+            }
+            count=0;
+        }
 
         return false;
     }

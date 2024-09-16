@@ -53,6 +53,6 @@ public class Board {
         }
     }
     public Box[][] getBoardsur(){
-        return this.Boardsur;
+        return this.Boardsur; // return the box list on the board.
     }
 }
