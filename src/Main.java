@@ -16,11 +16,17 @@ public class Main {
         // check which game the user wants to play
         userGame = gameChoice();
 
+        // get the number of players
+        // get the number of players, the user should enter an even number
+        numPlayer = getNumPlayer();
+        // use the numplayer to create numplayer Player objects
+        Player[] players= new Player[numPlayer];
+
+
         if (userGame==1){
             // for tic-tac-toe
-            // get the number of players
-            // get the number of players, the user should enter an even number
-            numPlayer = getNumPlayer();
+
+            setPlayerMarks3t(players, numPlayer);
 
             // get the size of the board in terms of nxn, by now
             boardSize = enterBoardSize();
@@ -29,6 +35,9 @@ public class Main {
             Board tictac = new Board(boardSize, boardSize);
             tictac.createBoardPiece();
             tictac.printBoard();
+
+            // Game play
+
 
         }
         else{
@@ -40,10 +49,10 @@ public class Main {
             orderChaos.createBoardPiece();
             orderChaos.printBoard(); // initial printout of the board game
 
-
         }
 
     }
+
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     // this method will be used more than once
@@ -80,6 +89,7 @@ public class Main {
         }
         return Integer.valueOf(userIn);
     }
+
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static int getNumPlayer(){
@@ -104,6 +114,7 @@ public class Main {
         return numPlayer;
 
     }
+
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static int enterBoardSize(){
@@ -126,6 +137,7 @@ public class Main {
 
         return boardSize;
     }
+
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static boolean CheckWin(Board board, String Mark){
@@ -193,8 +205,36 @@ public class Main {
             }
 
         }
-        count = 0;
         return false;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static void setPlayerMarks3t(Player[] players, int numPlayers){
+        // assign player to X or O
+        for (int i =0; i<numPlayers;i++){
+            players[i]=new Player(i);
+            if (i<= (numPlayers/2)-1){
+                players[i].setPlayerMark("X");
+            }else{
+                players[i].setPlayerMark("O");
+            }
+        }
+
+
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    //Game Play for tic-tac-toe
+    public static void gamePlay3t(Board board, int numPlayer){
+
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static void gamePlayOC(Board board, int numPlayer){
+
     }
 
 }

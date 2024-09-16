@@ -1,20 +1,25 @@
 public class Player {
-    private String playerName;
-    private char playerMark;
+
+    private int playerID;
+    private String playerMark;
     private int[] playerLossWin;
 
-    public Player(String playerName, char playerMark){
-        this.playerName = playerName;
-        this.playerMark = playerMark;
+    public Player(int playerID){
+        this.playerID = playerID;
+        this.playerMark = null;
         this.playerLossWin = new int[2]; // array of int that represetns the win loss count of players
     }
 
-    public String getPlayerName(){
-        return this.playerName;
+    public int getPlayerID(){
+        return playerID;
     }
-    public char getPlayerMark(){
+    public String getPlayerMark(){
         return this.playerMark;
     }
+    public void setPlayerMark(String mark){
+        this.playerMark = mark;
+    }
+
     public void setPlayerWin(){
         this.playerLossWin[0] += 1;
     }
