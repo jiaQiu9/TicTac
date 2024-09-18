@@ -264,6 +264,13 @@ public class GameLogic {
 
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
+    // Return the list of players of the same team
+    public static Player[] getPlayerTeam(Player[] players,int numPlayers ,int position, int start, int end){
+
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     //Game Play for tic-tac-toe
     public static void gamePlay3t( Player[] players, int numPlayers){
         //pointers for the players, so there is no need for creating two array to store players of different teams
@@ -277,6 +284,7 @@ public class GameLogic {
 
         // this is where the start of the game
         Scanner userInput = new Scanner(System.in);
+        String userIn ;
         System.out.println("Tic-Tac-Toe Starting.");
 
         // distinguish different num of players, for 2 players one will be X other will be O
@@ -291,8 +299,9 @@ public class GameLogic {
         // gameEnd is for when the player(s) do not want to play anymore, so ends the while loop
         // the loop will continue as long as the player continues to play
         while(!gameEnd){
-            boolean winNext = false; // false board not filled and no winner yet, true winner or the board is filled no winner
+            boolean winNext = false; // false board no winner yet, true winner
 
+            boolean gameContinue = false; // continue the game, false board not filled and no winner and player want to continue; true board filled, player win, player ends game
             // get the size of the board in terms of nxn, by now, maybe in the future have mxn or every row has different column sizes
             boardSize = enterBoardSize();
 
@@ -302,11 +311,12 @@ public class GameLogic {
             tictac.createBoardPiece();
             tictac.printBoard();
             int maxNumBox=boardSize*boardSize ;
+
             // after creating the board, and pieces on the board.
             // have a while loop that keeps altering the turns, ask players for moves, ends when either the board is filled with no winner
             // or when there is a winner
 
-            while(!winNext){
+            while(!winNext || !gameContinue){
                 // when turn== true, the first team moves. when turn == false, the second team moves
                 if (turn){
                     // maxNumbox-1, positions start at 0, not 1
@@ -318,24 +328,89 @@ public class GameLogic {
                     }
                     if(tictac.getOccupancy() == maxNumBox){
                         // the board is filled out, end game
-                        winNext = true;
-                        // TO-DO need to distinguish between win and board filled out
+                        gameContinue =true;
+                        // TO-DO (Done) need to distinguish between win and board filled out
                     }
                     if (numPlayers>2){
                         // TO-DO need something to change player in the same team
+                        if (first+1==second){
+                            first = 0;
+                        }
+                        else if(first+1<second){
+                            first++;
+                        }
                     }
+                    // if there are only two players in the game, the first and second does not change
 
                 }
                 else{
+                    // for the second player || the current player in the second team
                     placeMark(tictac, players[second], maxNumBox-1);
                     winNext = CheckWin(tictac,players[second].getPlayerMark());
+                    if (winNext == false){
+                        // when the current player's move is not a win condition
+                        turn = !turn; // change turn
+                    }
+                    if(tictac.getOccupancy() == maxNumBox){
+                        // the board is filled out, end game
+                        gameContinue =true;
+                        // TO-DO (Done) need to distinguish between win and board filled out
+                    }
+                    if (numPlayers>2){
+                        // TO-DO need something to change player in the same team
+                        if (second+1==numPlayers-1){
+                            second= numPlayers/2 -1;
+                        }
+                        else if(second+1<numPlayers){
+                            second++;
+                        }
+                    }
+                    // if there are only two players in the game, the first and second does not change
                 }
+            }
+            if (winNext){
+                // if there is a win increment the user statistics and display user statistics
+                // while also increment the team's statistics
+                // use the turn to distinguish between players
+                int tempRef; // temporary reference to the current team
+                if (turn){
+                    // first team
+                    tempRef=first;
+                }else{
+                    // second team
+                    tempRef=second;
+                }
+
+                if (numPlayers>2){
+
+                }
+                else{
+
+                }
+
+            }
+            // TO-DO win condition, board filled condition, ask the user if they want to continue.
+            // only one player could decide if the game continues
+            System.out.println("Do you want to play another game?");
+            System.out.println("1. Yes, Enter Y/y");
+            System.out.println("2. No, Enter anything else");
+            userIn = userInput.nextLine();
+            if (userIn.equals("Y") || userIn.equals("y")){
+                System.out.println("Thank you for choosing to continue playing.");
+                gameEnd=false;
+            }
+            else{
+                System.out.println(" You have entered something other than Y/y");
+                System.out.println(" The Game Ends ");
+                System.out.println(" GoodBye ");
+                gameEnd=true;
             }
 
         }
 
 
         // TO-DO, need to display player results, this is where the players have done with the game
+        // TO-DO, need to increase the player results.
 
 
     }
