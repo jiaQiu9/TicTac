@@ -26,4 +26,11 @@ public class Player {
     public void setPlayerLoss(){
         this.playerLossWin[1] += 1;
     }
+
+    public int getPlayerWin(){
+        return this.playerLossWin[0];
+    }
+    public int getPlayerLoss(){
+        return this.playerLossWin[1];
+    }
 }

@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class GameLogic {
@@ -265,8 +266,37 @@ public class GameLogic {
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     // Return the list of players of the same team
-    public static Player[] getPlayerTeam(Player[] players,int numPlayers ,int position, int start, int end){
+    public static void incrementPlayerStats(Player[] players,int numPlayers, int ref){
+        // TO-DO
+        int mid= numPlayers/2 -1;
+        if (0<=ref && ref<=mid){
+            // first team
+            for (int i=0; i<=mid; i++){
+                players[i].setPlayerWin();
+            }
+            for(int j=mid+1; j<=numPlayers;j++){
+                players[j].setPlayerLoss();
+            }
+        }else if (mid<ref && ref<=numPlayers-1){
+            // second team win, first team loss
+            for(int j=mid+1; j<=numPlayers;j++){
+                players[j].setPlayerWin();
+            }
+            for (int i=0; i<=mid; i++){
+                players[i].setPlayerLoss();
+            }
+        }
 
+    }
+
+    public static void printPlayerStats(Player[] players,int numPlayers){
+        for(int i=0; i<numPlayers; i++){
+            System.out.println("---------------------------------------------");
+            System.out.println("[+] Player "+players[i].getPlayerID()+":");
+            System.out.println("  [won] "+players[i].getPlayerWin()+" games");
+            System.out.println("  [loss] "+players[i].getPlayerLoss()+" games");
+            System.out.println("---------------------------------------------");
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -361,18 +391,21 @@ public class GameLogic {
                         if (second+1==numPlayers-1){
                             second= numPlayers/2 -1;
                         }
-                        else if(second+1<numPlayers){
+                        else if(second+1<numPlayers-1){
                             second++;
                         }
                     }
                     // if there are only two players in the game, the first and second does not change
                 }
             }
+
             if (winNext){
                 // if there is a win increment the user statistics and display user statistics
                 // while also increment the team's statistics
                 // use the turn to distinguish between players
-                int tempRef; // temporary reference to the current team
+
+
+                int tempRef; // temporary reference to the current team, if there is more than two players
                 if (turn){
                     // first team
                     tempRef=first;
@@ -380,15 +413,20 @@ public class GameLogic {
                     // second team
                     tempRef=second;
                 }
+                System.out.println("Players in team "+tempRef+" Win");
 
-                if (numPlayers>2){
-
-                }
-                else{
-
-                }
+                incrementPlayerStats(players, numPlayers, tempRef);
+                // there is a win for one of the teams, increment the win for winner
+                // increment the loss of the lossing team.
 
             }
+            else if (winNext==false && gameContinue==true){
+                System.out.println("The board is filled out. There is a Tie");
+            }
+
+
+            printPlayerStats(players, numPlayers); // print player stats
+
             // TO-DO win condition, board filled condition, ask the user if they want to continue.
             // only one player could decide if the game continues
             System.out.println("Do you want to play another game?");
@@ -410,7 +448,7 @@ public class GameLogic {
 
 
         // TO-DO, need to display player results, this is where the players have done with the game
-        // TO-DO, need to increase the player results.
+
 
 
     }
