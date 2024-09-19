@@ -265,7 +265,7 @@ public class GameLogic {
 
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    // Return the list of players of the same team
+    // Increment the statistics of all players either win or loss
     public static void incrementPlayerStats(Player[] players,int numPlayers, int ref){
         // TO-DO
         int mid= numPlayers/2 -1;
@@ -289,6 +289,8 @@ public class GameLogic {
 
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     public static void printPlayerStats(Player[] players,int numPlayers){
         for(int i=0; i<numPlayers; i++){
             System.out.println("---------------------------------------------");
@@ -296,6 +298,21 @@ public class GameLogic {
             System.out.println("  [won] "+players[i].getPlayerWin()+" games");
             System.out.println("  [loss] "+players[i].getPlayerLoss()+" games");
             System.out.println("---------------------------------------------");
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static void printWinnerPlayersId(Player[] players, int numPlayers, int ref){
+        int mid = numPlayers/2 -1;
+        if (0<=ref && ref<=mid){
+            for (int i=0; i<=mid; i++){
+                System.out.println(" Player "+players[i].getPlayerID()+" wins!");
+            }
+        }else if (mid<ref && ref<=numPlayers-1){
+            for (int i=mid+1; i<=numPlayers; i++){
+                System.out.println(" Player "+players[i].getPlayerID()+" wins!");
+            }
         }
     }
 
@@ -377,9 +394,9 @@ public class GameLogic {
                     // for the second player || the current player in the second team
                     placeMark(tictac, players[second], maxNumBox-1);
                     winNext = CheckWin(tictac,players[second].getPlayerMark());
-                    if (winNext == false){
+                    if (!winNext){
                         // when the current player's move is not a win condition
-                        turn = !turn; // change turn
+                        turn = !turn; // change turn with a not condition
                     }
                     if(tictac.getOccupancy() == maxNumBox){
                         // the board is filled out, end game
@@ -403,8 +420,6 @@ public class GameLogic {
                 // if there is a win increment the user statistics and display user statistics
                 // while also increment the team's statistics
                 // use the turn to distinguish between players
-
-
                 int tempRef; // temporary reference to the current team, if there is more than two players
                 if (turn){
                     // first team
@@ -413,14 +428,16 @@ public class GameLogic {
                     // second team
                     tempRef=second;
                 }
-                System.out.println("Players in team "+tempRef+" Win");
+                System.out.println("Players in team "+tempRef+" Win.");
 
                 incrementPlayerStats(players, numPlayers, tempRef);
                 // there is a win for one of the teams, increment the win for winner
                 // increment the loss of the lossing team.
 
-            }
-            else if (winNext==false && gameContinue==true){
+                // print winner players id
+                printWinnerPlayersId(players, numPlayers, tempRef);
+
+            } else if (!winNext && gameContinue){
                 System.out.println("The board is filled out. There is a Tie");
             }
 
@@ -435,7 +452,7 @@ public class GameLogic {
             userIn = userInput.nextLine();
             if (userIn.equals("Y") || userIn.equals("y")){
                 System.out.println("Thank you for choosing to continue playing.");
-                gameEnd=false;
+                //gameEnd=false;
             }
             else{
                 System.out.println(" You have entered something other than Y/y");
@@ -445,12 +462,7 @@ public class GameLogic {
             }
 
         }
-
-
-        // TO-DO, need to display player results, this is where the players have done with the game
-
-
-
+        // The user chooses to end the game
     }
 
     // -----------------------------------------------------------------------------------------------------------------
