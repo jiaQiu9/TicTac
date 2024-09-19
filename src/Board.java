@@ -46,14 +46,19 @@ public class Board {
                 System.out.print("_");
             }
             System.out.println();
+            System.out.print("|");
             for (int j=0; j<this.getBoardSizeN(); j++){
-
                 if (this.Boardsur[i][j].getMark() == null){
-                    System.out.print(" |");
+                    System.out.print(this.Boardsur[i][j].getId());
+                    System.out.print(". |");
                 }
                 else{
-                    System.out.print(this.Boardsur[i][j].getMark()+"|");
+                    System.out.print(this.Boardsur[i][j].getId()+". "+this.Boardsur[i][j].getMark()+"|");
                 }
+            }
+            System.out.println();
+            for (int k=0; k<this.getBoardSizeN()*2; k++){
+                System.out.print("_");
             }
             System.out.println();
         }

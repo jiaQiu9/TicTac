@@ -6,7 +6,7 @@ public class Player {
 
     public Player(int playerID){
         this.playerID = playerID;
-        this.playerMark = null;
+        this.playerMark = "";
         this.playerLossWin = new int[2]; // array of int that represetns the win loss count of players
     }
 

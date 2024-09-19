@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class GameLogic {
@@ -18,7 +17,7 @@ public class GameLogic {
         // get the number of players
         // get the number of players, the user should enter an even number
         numPlayer = getNumPlayer();
-        // use the numplayer(number of players) to create a list of type player with size numplayer
+        // use the numPlayer(number of players) to create a list of type player with size numplayer
         Player[] playerslst= new Player[numPlayer];
 
         if (userGame==1){
@@ -99,7 +98,7 @@ public class GameLogic {
             userIn = userInput.nextLine();
             System.out.println();
             if (checkInt(userIn)){
-                if (Integer.valueOf(userIn)%2==0 && Integer.valueOf(userIn)>2){
+                if (Integer.valueOf(userIn)%2==0 && Integer.valueOf(userIn)>=2){
                     isValid = true;
                     numPlayer = Integer.parseInt(userIn);
                 }
@@ -150,7 +149,7 @@ public class GameLogic {
         for (int i = 0; i < tmp.length; i++){
 
             for (int j = 0; j < tmp[i].length; j++){
-                if (tmp[i][j].getMark().equals(Mark)){
+                if (tmp[i][j].getMark()== Mark){
                     count++;
                 }
             }
@@ -164,7 +163,7 @@ public class GameLogic {
         for (int i = 0; i < board.getBoardSizeN(); i++){
 
             for (int j = 0; j < board.getBoardSizeM(); j++){
-                if (tmp[j][i].getMark().equals(Mark)){
+                if (tmp[j][i].getMark()== Mark){
                     count++;
                 }
             }
@@ -178,7 +177,7 @@ public class GameLogic {
         for (int i = 0; i < board.getBoardSizeM(); i++){
 
             for (int j = 0; j < board.getBoardSizeN(); j++){
-                if (i==j && tmp[i][j].getMark().equals(Mark)){
+                if (i==j && tmp[i][j].getMark()== Mark){
                     count++;
                 }
                 if (count == board.getBoardSizeM()){ // TO Do need to change to actual diagonal num
@@ -191,7 +190,7 @@ public class GameLogic {
         // check diagonal backward
         for (int i=board.getBoardSizeN()-1; i>0; i--){
             for (int j=0; j<board.getBoardSizeM(); j++){
-                if(tmp[j][i].getMark().equals(Mark)){
+                if(tmp[j][i].getMark()== Mark){
                     count++;
                 }
                 if (count == board.getBoardSizeM()) { // TO DO need to change to actual diagonal num
@@ -227,20 +226,20 @@ public class GameLogic {
         String userIn;
         int position;
         while(!isValid){
-            System.out.println("Player "+ player.getPlayerID()+ " make your move. Your mark is "+ player.getPlayerMark());
-            System.out.print("Enter a numeric value that represents the position on the board, that your want to place your mark:");
+            System.out.println("------------------------------------------------------------------------------------------");
+            System.out.println("[+]Player "+ player.getPlayerID()+ " make your move. Your mark is "+ player.getPlayerMark());
             board.printBoard();
-
+            System.out.println("Enter a numeric value that represents the position on the board, that your want to place your mark:");
             userIn = scanner.nextLine();
             if (checkInt(userIn)){
                 //it is an integer value, need to check if the entered position is within the board parameter
                 position = Integer.parseInt(userIn);
-                if (position<1 || position>=maxPos){
+                if (position<0 || position>maxPos){
                     // out of bounds
                     isValid = false;
                     System.out.println("Position is out of bounds. Try again.");
                 }
-                else if (position>=1 && position<maxPos){
+                else if (position>=0 && position<=maxPos){
                     // in bounds
                     // need to check availability/ if empty, then assign it
                     if (board.getBoxApos(position).isOccupied()){
@@ -269,17 +268,19 @@ public class GameLogic {
     public static void incrementPlayerStats(Player[] players,int numPlayers, int ref){
         // TO-DO
         int mid= numPlayers/2 -1;
+        System.out.println("numPlayers: "+numPlayers+" mid "+mid+" ref: "+ref);
         if (0<=ref && ref<=mid){
             // first team
             for (int i=0; i<=mid; i++){
                 players[i].setPlayerWin();
             }
-            for(int j=mid+1; j<=numPlayers;j++){
+            for(int j=mid+1; j<numPlayers;j++){
                 players[j].setPlayerLoss();
             }
         }else if (mid<ref && ref<=numPlayers-1){
             // second team win, first team loss
-            for(int j=mid+1; j<=numPlayers;j++){
+            for(int j=mid+1; j<numPlayers;j++){
+                System.out.println("j value= "+j);
                 players[j].setPlayerWin();
             }
             for (int i=0; i<=mid; i++){
@@ -310,7 +311,7 @@ public class GameLogic {
                 System.out.println(" Player "+players[i].getPlayerID()+" wins!");
             }
         }else if (mid<ref && ref<=numPlayers-1){
-            for (int i=mid+1; i<=numPlayers; i++){
+            for (int i=mid+1; i<numPlayers; i++){
                 System.out.println(" Player "+players[i].getPlayerID()+" wins!");
             }
         }
@@ -325,7 +326,6 @@ public class GameLogic {
         int second=1; // the pointer for the second player OR the first player of the other(second) team, initialize to 1, modified later
         boolean gameEnd=false;
         boolean turn = false; //when false team 1's term . when true team 2's turn
-        String playerMove = ""; // not sure what this is for.
 
         int boardSize = 3; // the board size for 3t game starts from 3x3 to nxn
 
@@ -358,17 +358,20 @@ public class GameLogic {
             tictac.createBoardPiece();
             tictac.printBoard();
             int maxNumBox=boardSize*boardSize ;
-
+            System.out.println();
             // after creating the board, and pieces on the board.
             // have a while loop that keeps altering the turns, ask players for moves, ends when either the board is filled with no winner
             // or when there is a winner
 
-            while(!winNext || !gameContinue){
+            while(!winNext && !gameContinue){
                 // when turn== true, the first team moves. when turn == false, the second team moves
                 if (turn){
+                    System.out.println();
                     // maxNumbox-1, positions start at 0, not 1
                     placeMark(tictac, players[first], maxNumBox-1);
                     winNext = CheckWin(tictac,players[first].getPlayerMark());
+                    System.out.println("WinNext "+winNext+" gameContinue "+gameContinue+" players[first] "+players[first].getPlayerID());
+                    //System.out.println("!winNext || !gameContinue" + (!winNext || !gameContinue));
                     if (winNext == false){
                         // when the current player's move is not a win condition
                         turn = !turn; // change turn
@@ -394,6 +397,7 @@ public class GameLogic {
                     // for the second player || the current player in the second team
                     placeMark(tictac, players[second], maxNumBox-1);
                     winNext = CheckWin(tictac,players[second].getPlayerMark());
+                    System.out.println("WinNext "+winNext+" players[first] "+players[first].getPlayerID());
                     if (!winNext){
                         // when the current player's move is not a win condition
                         turn = !turn; // change turn with a not condition
@@ -420,6 +424,7 @@ public class GameLogic {
                 // if there is a win increment the user statistics and display user statistics
                 // while also increment the team's statistics
                 // use the turn to distinguish between players
+                tictac.printBoard();
                 int tempRef; // temporary reference to the current team, if there is more than two players
                 if (turn){
                     // first team
