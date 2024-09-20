@@ -16,6 +16,9 @@ public class Player {
     public String getPlayerMark(){
         return this.playerMark;
     }
+
+    // this could also be used for changing player mark in the order and chaos game
+    // need an input checker
     public void setPlayerMark(String mark){
         this.playerMark = mark;
     }
@@ -33,4 +36,7 @@ public class Player {
     public int getPlayerLoss(){
         return this.playerLossWin[1];
     }
+
+
+
 }

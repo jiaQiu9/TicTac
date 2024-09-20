@@ -14,7 +14,6 @@ public class Box {
     public void setMark(String mark){
         this.mark = mark;
     }
-
     public boolean isOccupied(){
         return this.occupied;
     }

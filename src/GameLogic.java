@@ -5,7 +5,7 @@ public class GameLogic {
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     public static void startGame(){
-        Scanner userInput = new Scanner(System.in);
+        //Scanner userInput = new Scanner(System.in);
         int numPlayer;
         int boardSize;
         int userGame;
@@ -25,23 +25,27 @@ public class GameLogic {
 
             // create numplayer player objects, which should be stored in playerslst
             // the numplayer would be fixed from this point on, until the players end the game. easier to keep track of players
-            setPlayerMarks3t(playerslst, numPlayer);
+            setPlayerMarks3t(playerslst, numPlayer, true);
 
             // Game play
             gamePlay3t( playerslst, numPlayer);
 
 
         }
-        else{
+        else if (userGame==2){
             // for order and chaos
             System.out.println("Order and chaos Launching");
-            boardSize = 6;
-            System.out.println("The size of the board is "+boardSize+", which is fixed for the current Game.");
-            Board orderChaos=new Board(boardSize,boardSize);
-            orderChaos.createBoardPiece();
-            orderChaos.printBoard(); // initial printout of the board game
 
+            // TO-DO
+            // do the board creation and other things in the Game Play
+            // need a new player marks setter method
+            //
+            setPlayerMarks3t(playerslst, numPlayer,false);
+            gamePlayOC(playerslst,numPlayer);
             // Game Play
+        } else{
+            System.out.println("You have choosen an option that is not listed.");
+            System.out.println("The System is Closing.");
         }
     }
 
@@ -90,7 +94,7 @@ public class GameLogic {
         // some games have fixed player num, some have flexible player num
         // the number of player should be even number, for now
         Scanner userInput = new Scanner(System.in);
-        String userIn="";
+        String userIn;
         int numPlayer = 0;
         boolean isValid = false;
         while(!isValid){
@@ -112,19 +116,20 @@ public class GameLogic {
     // -----------------------------------------------------------------------------------------------------------------
     public static int enterBoardSize(){
         Scanner userInput = new Scanner(System.in);
-        String userIn="";
+        String userIn;
         boolean isValid = false;
         int boardSize = 3;
         while(!isValid){
             // the max could be changed later
-            System.out.print("Enter the size of the board: (Enter one numeric value, min size is 3, max is 20):");
+            System.out.print("Enter the size of the board: (Enter one numeric value, min size is 3, max is 10):");
             userIn = userInput.nextLine();
             if (checkInt(userIn)){
                 if (Integer.valueOf(userIn)<3){
                     isValid = false;
                 }
-                else if (Integer.valueOf(userIn)>=3 && Integer.valueOf(userIn)<=20){
+                else if (Integer.valueOf(userIn)>=3 && Integer.valueOf(userIn)<=10){
                     isValid = true;
+                    boardSize = Integer.parseInt(userIn);
                 }
             }
         }
@@ -147,7 +152,6 @@ public class GameLogic {
         //
         //check every row
         for (int i = 0; i < tmp.length; i++){
-
             for (int j = 0; j < tmp[i].length; j++){
                 if (tmp[i][j].getMark()== Mark){
                     count++;
@@ -201,19 +205,169 @@ public class GameLogic {
         }
         return false;
     }
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    // helper function for the checkOcWin
+    public static boolean checkDiagonal(Box[][] tmp, String Mark, int[][] diagonal, boolean type){
+        int count =0;
+        if (type){
+            if (tmp[diagonal[0][0]][diagonal[0][1]].getMark()==Mark){
+                for(int i=0;i<diagonal.length-1;i++){
+                    if(tmp[diagonal[i][0]][diagonal[i][1]].getMark()==Mark){
+                        count++;
+                    }
+                }
+                if(count==5){
+                    return true;
+                }else{
+                    count=0;
+                }
+            }else if(tmp[diagonal[1][0]][diagonal[1][1]].getMark()==Mark){
+                for(int i=1;i<diagonal.length;i++){
+                    if(tmp[diagonal[i][0]][diagonal[i][1]].getMark()==Mark){
+                        count++;
+                    }
+                }
+                if(count==5){
+                    return true;
+                }else{
+                    count=0;
+                }
+            }
+        } else{
+            if (tmp[diagonal[0][0]][diagonal[0][1]].getMark()==Mark){
+                for(int i=0;i<diagonal.length;i++){
+                    if(tmp[diagonal[i][0]][diagonal[i][1]].getMark()==Mark){
+                        count++;
+                    }
+                }
+                if(count==5){
+                    return true;
+                }else{
+                    count=0;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
 
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    public static void setPlayerMarks3t(Player[] players, int numPlayers){
+    // check the win condition for Order and Chaos game
+    // five consecutive same marks
+    public static boolean checkOcWin(Board board, String Mark){
+        int count =0;
+        Box[][] tmp = board.getBoardsur();
+        // row check
+        for (int i=0;i<board.getBoardSizeM();i++){
+            if (tmp[i][0].getMark()==Mark){
+                for (int j=0;j<board.getBoardSizeN()-1;j++){
+                    // from index 0 to 4 if all the same mark, return true
+                    if(tmp[i][j].getMark()== Mark){
+                        count ++;
+                    }
+                }
+            } else if(tmp[i][1].getMark()==Mark){
+                for (int j=1;j<board.getBoardSizeN();j++){
+                    // from index 1 to 5, if all the same mark, return true
+                    if (tmp[i][j].getMark()== Mark){
+                        count ++;
+                    }
+                }
+            }
+            if (count == 5){
+                return true;
+            }
+            count=0;
+        }
+
+        // Column check
+        for (int i=0;i<board.getBoardSizeN();i++){
+            // column iteration
+            if (tmp[0][i].getMark()==Mark){
+                for(int j=0;j<board.getBoardSizeN()-1;j++){
+                    if (tmp[j][i].getMark()== Mark){
+                        count++;
+                    }
+                }
+            } else if (tmp[1][i].getMark()==Mark){
+                for(int j=1;j<board.getBoardSizeN();j++){
+                    if (tmp[j][i].getMark()== Mark){
+                        count++;
+                    }
+                }
+            }
+            if (count==5){
+                return true;
+            }
+            count =0;
+        }
+        // the possible diagonal position, nto sure what loop or recursion to use to go through the board,
+        // so hard coded the positions of the diagonals
+        int[][] diagonal1={{0,0},{1,1},{2,2},{3,3},{4,4},{5,5}};
+        int[][] diagonal2= {{0,1},{1,2},{2,3},{3,4},{4,5}};
+        int[][] diagonal3={{1,0},{2,1},{3,2},{4,3},{5,4}};
+
+        int[][] diagonal4={{0,5},{1,4},{2,3},{3,2},{4,1},{5,0}};
+        int[][] diagonal5={{4,0},{3,1},{2,2},{1,3},{0,4}};
+        int[][] diagonal6={{5,1},{4,2},{3,3},{2,4},{1,5}};
+
+        return checkDiagonal(tmp, Mark,diagonal1,true)||checkDiagonal(tmp, Mark,diagonal2,false)||
+                checkDiagonal(tmp, Mark,diagonal3,false) || checkDiagonal(tmp, Mark,diagonal4,true)||
+                checkDiagonal(tmp, Mark,diagonal5,false) || checkDiagonal(tmp, Mark, diagonal6, false);
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static void setPlayerMarks3t(Player[] players, int numPlayers, boolean game){
         // assign player to X or O
-        for (int i =0; i<numPlayers;i++){
-            players[i]=new Player(i);
-            if (i<= (numPlayers/2)-1){
-                players[i].setPlayerMark("X");
-            }else{
-                players[i].setPlayerMark("O");
+        if (game){
+            // game 1 tic-tac toe
+            // need to preassign marks
+            for (int i =0; i<numPlayers;i++){
+                players[i]=new Player(i);
+                if (i<= (numPlayers/2)-1){
+                    players[i].setPlayerMark("X");
+                }else{
+                    players[i].setPlayerMark("O");
+                }
+            }
+        }else{
+            // order and chaos, no need to preassign marks
+            for (int i =0; i<numPlayers;i++){
+                players[i]=new Player(i);
             }
         }
+
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    public static void chooseMark(Player player){
+        // for order and chaos where the players could choose their own marks
+        Scanner scanner = new Scanner(System.in);
+        String userIn;
+        boolean isValid =false;
+
+        while (!isValid){
+            System.out.println(" Please choose your mark. X or O:");
+            userIn = scanner.nextLine();
+            if(userIn.equals("X")|| userIn.equals("x") ){
+                player.setPlayerMark("X");
+                isValid=true;
+
+            } else if (userIn.equals("O")|| userIn.equals("o")){
+                player.setPlayerMark("O");
+                isValid=true;
+            }
+            else{
+                System.out.println("Please Choose your mark. X or O, nothing else is accepted.");
+            }
+        }
+
     }
 
 
@@ -262,6 +416,8 @@ public class GameLogic {
         }
     }
 
+
+
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     // Increment the statistics of all players either win or loss
@@ -280,7 +436,7 @@ public class GameLogic {
         }else if (mid<ref && ref<=numPlayers-1){
             // second team win, first team loss
             for(int j=mid+1; j<numPlayers;j++){
-                System.out.println("j value= "+j);
+
                 players[j].setPlayerWin();
             }
             for (int i=0; i<=mid; i++){
@@ -328,7 +484,7 @@ public class GameLogic {
         boolean turn = false; //when false team 1's term . when true team 2's turn
 
         int boardSize = 3; // the board size for 3t game starts from 3x3 to nxn
-
+        int mid=0;
         // this is where the start of the game
         Scanner userInput = new Scanner(System.in);
         String userIn ;
@@ -338,8 +494,10 @@ public class GameLogic {
         // for more than 2 player, the first half of the players will be X, the other half will be O
         // number of Players should always be even, and more than one
         if (numPlayers>2){
-            second = numPlayers/2 -1;
+            second = numPlayers/2;
+            mid=numPlayers/2 -1;
         }
+
         System.out.println("Game Start!");
 
 
@@ -358,6 +516,7 @@ public class GameLogic {
             tictac.createBoardPiece();
             tictac.printBoard();
             int maxNumBox=boardSize*boardSize ;
+            System.out.println(" The Size of the board is "+boardSize+ " the max boardsize "+maxNumBox);
             System.out.println();
             // after creating the board, and pieces on the board.
             // have a while loop that keeps altering the turns, ask players for moves, ends when either the board is filled with no winner
@@ -370,7 +529,7 @@ public class GameLogic {
                     // maxNumbox-1, positions start at 0, not 1
                     placeMark(tictac, players[first], maxNumBox-1);
                     winNext = CheckWin(tictac,players[first].getPlayerMark());
-                    System.out.println("WinNext "+winNext+" gameContinue "+gameContinue+" players[first] "+players[first].getPlayerID());
+                    //System.out.println("WinNext "+winNext+" gameContinue "+gameContinue+" players[first] "+players[first].getPlayerID());
                     //System.out.println("!winNext || !gameContinue" + (!winNext || !gameContinue));
                     if (winNext == false){
                         // when the current player's move is not a win condition
@@ -383,10 +542,10 @@ public class GameLogic {
                     }
                     if (numPlayers>2){
                         // TO-DO need something to change player in the same team
-                        if (first+1==second){
+                        if (first+1==mid+1){
                             first = 0;
                         }
-                        else if(first+1<second){
+                        else if(first+1<mid){
                             first++;
                         }
                     }
@@ -397,7 +556,7 @@ public class GameLogic {
                     // for the second player || the current player in the second team
                     placeMark(tictac, players[second], maxNumBox-1);
                     winNext = CheckWin(tictac,players[second].getPlayerMark());
-                    System.out.println("WinNext "+winNext+" players[first] "+players[first].getPlayerID());
+                    //System.out.println("WinNext "+winNext+" players[first] "+players[first].getPlayerID());
                     if (!winNext){
                         // when the current player's move is not a win condition
                         turn = !turn; // change turn with a not condition
@@ -409,8 +568,8 @@ public class GameLogic {
                     }
                     if (numPlayers>2){
                         // TO-DO need something to change player in the same team
-                        if (second+1==numPlayers-1){
-                            second= numPlayers/2 -1;
+                        if (second+1==numPlayers){
+                            second= numPlayers/2;
                         }
                         else if(second+1<numPlayers-1){
                             second++;
@@ -457,7 +616,7 @@ public class GameLogic {
             userIn = userInput.nextLine();
             if (userIn.equals("Y") || userIn.equals("y")){
                 System.out.println("Thank you for choosing to continue playing.");
-                //gameEnd=false;
+                gameEnd=false;
             }
             else{
                 System.out.println(" You have entered something other than Y/y");
@@ -472,7 +631,144 @@ public class GameLogic {
 
     // -----------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    public static void gamePlayOC(Board board, int numPlayer){
+    public static void gamePlayOC(Player[] players, int numPlayers){
+        int first=0;
+        int second=1;
+        boolean gameEnd=false;
+        boolean turn = false;
+        int mid =0;
+
+        if (numPlayers>2){
+            second = numPlayers/2;
+            mid=numPlayers/2 -1;
+        }
+
+        Scanner userInput = new Scanner(System.in);
+        String userIn;
+
+        // this is fixed
+        int boardSize = 6;
+        System.out.println("The size of the board is "+boardSize+", which is fixed for the current Game.");
+        Board orderChaos=new Board(boardSize,boardSize);
+        orderChaos.createBoardPiece();
+        orderChaos.printBoard(); // initial printout of the board game
+        int maxBoardSize = 35; // this is fixed
+
+
+        //
+        System.out.println("Order and Chaos Start.");
+        System.out.println("----------------------------------------------------------------------------");
+        while(!gameEnd){
+            boolean winNext = false;
+            boolean gameContinue = false;
+            // clears the marks on the board for a new game
+            orderChaos.emptyBoard();
+
+            while(!winNext && !gameContinue){
+                if (turn){
+                    // players in the first team
+                    chooseMark(players[first]);
+                    placeMark(orderChaos, players[first], maxBoardSize);
+                    winNext = checkOcWin(orderChaos,players[first].getPlayerMark());
+
+                    if (winNext == false){
+                        turn = !turn; // change turns
+                    }
+                    if(orderChaos.getOccupancy() == maxBoardSize){
+                        gameContinue =true; // board filled out
+                    }
+                    if (numPlayers>2){
+                        // TO-DO need something to change player in the same team
+                        if (first+1>mid){
+                            first = 0;
+                        }
+                        else if(first+1<=mid){
+                            first++;
+                        }
+                    }
+                    // if there are only two players in the game, the first and second does not change
+                }
+                else{
+                    // for the second player || the current player in the second team
+                    // the chaos team, where the win condition would be fill the board. Not sure how to do the not possible to win for order.
+                    chooseMark(players[second]);
+                    placeMark(orderChaos, players[second], maxBoardSize);
+//                    winNext = checkOcWin(orderChaos,players[second].getPlayerMark());
+//                    //System.out.println("WinNext "+winNext+" players[first] "+players[first].getPlayerID());
+//                    if (!winNext){
+//                        // when the current player's move is not a win condition
+//                        turn = !turn; // change turn with a not condition
+//                    }
+                    if(orderChaos.getOccupancy() == maxBoardSize){
+                        // the board is filled out, end game
+                        gameContinue =true;
+                        // TO-DO (Done) need to distinguish between win and board filled out
+                    }
+                    if (numPlayers>2){
+                        // TO-DO need something to change player in the same team
+                        if (second+1>numPlayers){
+                            second= numPlayers/2 ;
+                        }
+                        else if(second+1<=numPlayers-1){
+                            second++;
+                        }
+                    }
+                }
+            }
+
+            if (winNext){
+                // if there is a win increment the user statistics and display user statistics
+                // while also increment the team's statistics
+                // use the turn to distinguish between players
+                orderChaos.printBoard();
+                int tempRef= first; // temporary reference to the current team, if there is more than two players
+                String ordC= "order";
+                if (turn){
+                    // first team
+                    tempRef=first;
+                    ordC ="Order";
+                }
+//                else{
+//                    // second team
+//                    tempRef=second;
+//                    ordC ="Chaos";
+//                }
+                System.out.println("Players in team "+ordC+" Win.");
+
+                incrementPlayerStats(players, numPlayers, tempRef);
+                // there is a win for one of the teams, increment the win for winner
+                // increment the loss of the lossing team.
+
+                // print winner players id
+                printWinnerPlayersId(players, numPlayers, tempRef);
+
+            } else if (!winNext && gameContinue){
+                System.out.println("The board is filled out. The Chaos team wins.");
+                incrementPlayerStats(players, numPlayers, second);
+                printWinnerPlayersId(players, numPlayers, second);
+            }
+
+            printPlayerStats(players, numPlayers); // print player stats
+
+            // TO-DO win condition, board filled condition, ask the user if they want to continue.
+            // only one player could decide if the game continues
+            System.out.println("Do you want to play another game?");
+            System.out.println("1. Yes, Enter Y/y");
+            System.out.println("2. No, Enter anything else");
+            userIn = userInput.nextLine();
+            if (userIn.equals("Y") || userIn.equals("y")){
+                System.out.println("Thank you for choosing to continue playing.");
+                gameEnd=false;
+            }
+            else{
+                System.out.println(" You have entered something other than Y/y");
+                System.out.println(" The Game Ends ");
+                System.out.println(" GoodBye ");
+                gameEnd=true;
+            }
+        }
+
+
 
     }
 }

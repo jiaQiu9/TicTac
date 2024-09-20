@@ -1,5 +1,4 @@
 public class Board {
-
     private Box[][] Boardsur; //store separate class for each box on the board
     private int boardSizeM; //store the row number of the board
     private int boardSizeN; //store the column number of the board
@@ -8,7 +7,6 @@ public class Board {
     private String[][] playerWinLoss; // maybe there is no need for this
     private String[][] moves; //
     private int Turn; // keep track of player trun
-
 
     public Board(int boardM, int boardN){
         this.boardSizeM=boardM;
@@ -85,4 +83,20 @@ public class Board {
     public int getOccupancy(){
         return this.occupancy;
     }
+
+
+
+    // empty out the board's box's mark and occupancy
+    // set the board occupancy to 0
+    public void emptyBoard(){
+        for (int i=0; i<this.getBoardSizeM();i++){
+            for (int j=0; j<this.getBoardSizeN(); j++){
+                this.Boardsur[i][j].emptyMark();
+                this.Boardsur[i][j].emptyOccupied();
+
+            }
+        }
+        this.occupancy=0;
+    }
+
 }
