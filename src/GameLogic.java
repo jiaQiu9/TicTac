@@ -153,7 +153,7 @@ public class GameLogic {
         //check every row
         for (int i = 0; i < tmp.length; i++){
             for (int j = 0; j < tmp[i].length; j++){
-                if (tmp[i][j].getMark()== Mark){
+                if (tmp[i][j].getMark() == Mark){
                     count++;
                 }
             }
@@ -167,7 +167,7 @@ public class GameLogic {
         for (int i = 0; i < board.getBoardSizeN(); i++){
 
             for (int j = 0; j < board.getBoardSizeM(); j++){
-                if (tmp[j][i].getMark()== Mark){
+                if (tmp[j][i].getMark() == Mark){
                     count++;
                 }
             }
@@ -543,10 +543,10 @@ public class GameLogic {
                     }
                     if (numPlayers>2){
                         // TO-DO need something to change player in the same team
-                        if (first+1==mid+1){
+                        if (first+1>mid){
                             first = 0;
                         }
-                        else if(first+1<mid){
+                        else if(first+1<=mid){
                             first++;
                         }
                     }
@@ -572,7 +572,7 @@ public class GameLogic {
                         if (second+1==numPlayers){
                             second= numPlayers/2;
                         }
-                        else if(second+1<numPlayers-1){
+                        else if(second+1<=numPlayers-1){
                             second++;
                         }
                     }
