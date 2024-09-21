@@ -98,7 +98,7 @@ public class GameLogic {
         int numPlayer = 0;
         boolean isValid = false;
         while(!isValid){
-            System.out.print("Please enter the number of players(Enter numeric values, the number of players should be an even number): ");
+            System.out.print("Please enter the number of players \n(Enter numeric values, the number of players should be an even number): ");
             userIn = userInput.nextLine();
             System.out.println();
             if (checkInt(userIn)){
@@ -121,7 +121,7 @@ public class GameLogic {
         int boardSize = 3;
         while(!isValid){
             // the max could be changed later
-            System.out.print("Enter the size of the board: (Enter one numeric value, min size is 3, max is 10):");
+            System.out.print("Enter the size of the board: \n(Enter one numeric value, min size is 3, max is 10):");
             userIn = userInput.nextLine();
             if (checkInt(userIn)){
                 if (Integer.valueOf(userIn)<3){
@@ -353,7 +353,7 @@ public class GameLogic {
         boolean isValid =false;
 
         while (!isValid){
-            System.out.println(" Please choose your mark. X or O:");
+            System.out.println("[+]Please choose your mark. X or O:");
             userIn = scanner.nextLine();
             if(userIn.equals("X")|| userIn.equals("x") ){
                 player.setPlayerMark("X");
@@ -380,10 +380,11 @@ public class GameLogic {
         String userIn;
         int position;
         while(!isValid){
-            System.out.println("------------------------------------------------------------------------------------------");
-            System.out.println("[+]Player "+ player.getPlayerID()+ " make your move. Your mark is "+ player.getPlayerMark());
+            //System.out.println("------------------------------------------------------------------------------------------");
+            System.out.println();
             board.printBoard();
-            System.out.println("Enter a numeric value that represents the position on the board, that your want to place your mark:");
+            System.out.println("[+]Player "+ player.getPlayerID()+ " make your move. Your mark is "+ player.getPlayerMark());
+            System.out.println("Enter a numeric value that represents the position on the board,\nthat your want to place your mark:");
             userIn = scanner.nextLine();
             if (checkInt(userIn)){
                 //it is an integer value, need to check if the entered position is within the board parameter
@@ -481,7 +482,7 @@ public class GameLogic {
         int first =0; // the pointed for the first player, in the first team
         int second=1; // the pointer for the second player OR the first player of the other(second) team, initialize to 1, modified later
         boolean gameEnd=false;
-        boolean turn = false; //when false team 1's term . when true team 2's turn
+        boolean turn = true; //when false team 1's term . when true team 2's turn
 
         int boardSize = 3; // the board size for 3t game starts from 3x3 to nxn
         int mid=0;
@@ -635,7 +636,7 @@ public class GameLogic {
         int first=0;
         int second=1;
         boolean gameEnd=false;
-        boolean turn = false;
+        boolean turn = true;
         int mid =0;
 
         if (numPlayers>2){
@@ -651,25 +652,36 @@ public class GameLogic {
         System.out.println("The size of the board is "+boardSize+", which is fixed for the current Game.");
         Board orderChaos=new Board(boardSize,boardSize);
         orderChaos.createBoardPiece();
-        orderChaos.printBoard(); // initial printout of the board game
+        //orderChaos.printBoard(); // initial printout of the board game
         int maxBoardSize = 35; // this is fixed
 
+        System.out.println("----------------------------------------------------------------------------");
 
         //
+        System.out.println();
+        System.out.println();
+        System.out.println();
         System.out.println("Order and Chaos Start.");
-        System.out.println("----------------------------------------------------------------------------");
         while(!gameEnd){
             boolean winNext = false;
             boolean gameContinue = false;
             // clears the marks on the board for a new game
-            orderChaos.emptyBoard();
 
+            orderChaos.emptyBoard();
+            orderChaos.printBoard();
             while(!winNext && !gameContinue){
                 if (turn){
                     // players in the first team
+                    System.out.println("----------------------------------------------------------------------------");
+                    System.out.println();
+                    System.out.println();
+                    System.out.println("Player[order] "+ players[first].getPlayerID()+" turn.");
                     chooseMark(players[first]);
                     placeMark(orderChaos, players[first], maxBoardSize);
-                    winNext = checkOcWin(orderChaos,players[first].getPlayerMark());
+                    orderChaos.printBoard();
+                    System.out.println();
+                    System.out.println();
+                    winNext = checkOcWin(orderChaos,"X") || checkOcWin(orderChaos,"O"); // check both x and o for win
 
                     if (winNext == false){
                         turn = !turn; // change turns
@@ -686,19 +698,28 @@ public class GameLogic {
                             first++;
                         }
                     }
+
                     // if there are only two players in the game, the first and second does not change
                 }
                 else{
                     // for the second player || the current player in the second team
                     // the chaos team, where the win condition would be fill the board. Not sure how to do the not possible to win for order.
+                    System.out.println("----------------------------------------------------------------------------");
+                    System.out.println();
+                    System.out.println();
+                    System.out.println("Player(chaos) "+players[second].getPlayerID()+" turn.");
                     chooseMark(players[second]);
                     placeMark(orderChaos, players[second], maxBoardSize);
-//                    winNext = checkOcWin(orderChaos,players[second].getPlayerMark());
+                    orderChaos.printBoard();
+                    System.out.println();
+                    System.out.println();
+                    winNext = checkOcWin(orderChaos,"X") || checkOcWin(orderChaos,"O"); // check both x or o
 //                    //System.out.println("WinNext "+winNext+" players[first] "+players[first].getPlayerID());
 //                    if (!winNext){
 //                        // when the current player's move is not a win condition
 //                        turn = !turn; // change turn with a not condition
 //                    }
+                    turn =!turn; // alter between turns
                     if(orderChaos.getOccupancy() == maxBoardSize){
                         // the board is filled out, end game
                         gameContinue =true;
